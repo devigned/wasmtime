@@ -25,7 +25,7 @@ TMP_DIR=$TMP_DIR/mobilenet
 
 # Build Wasmtime with wasi-nn enabled; we attempt this first to avoid extra work
 # if the build fails.
-cargo build -p wasmtime-cli --features wasi-nn
+cargo build -p wasmtime-cli --features wasi-nn,component-model
 
 # Download all necessary test fixtures to the temporary directory.
 wget --no-clobber $FIXTURE/mobilenet.bin --output-document=$TMP_DIR/model.bin
