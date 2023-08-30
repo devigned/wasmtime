@@ -2,11 +2,14 @@
 //! this crate. The `Box<dyn ...>` types returned by these interfaces allow
 //! implementations to maintain backend-specific state between calls.
 
+pub mod onnx;
 pub mod openvino;
 
 use self::openvino::OpenvinoBackend;
 use crate::wit::types::{ExecutionTarget, GraphEncoding, Tensor};
 use crate::{Backend, ExecutionContext, Graph};
+use std::fs::File;
+use std::io::Read;
 use std::path::Path;
 use thiserror::Error;
 use wiggle::GuestError;
@@ -60,4 +63,12 @@ pub enum BackendError {
     InvalidNumberOfBuilders(usize, usize),
     #[error("Not enough memory to copy tensor data of size: {0}")]
     NotEnoughMemory(usize),
+}
+
+/// Read a file into a byte vector.
+fn read(path: &Path) -> anyhow::Result<Vec<u8>> {
+    let mut file = File::open(path)?;
+    let mut buffer = vec![];
+    file.read_to_end(&mut buffer)?;
+    Ok(buffer)
 }
