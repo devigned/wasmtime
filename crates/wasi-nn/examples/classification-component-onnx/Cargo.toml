@@ -1,0 +1,24 @@
+[package]
+name = "classification-component-onnx"
+version = "0.1.0"
+edition = "2021"
+
+[package.metadata.component]
+package = "component:classification-component-onnx"
+
+[package.metadata.component.dependencies]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+cargo-component-bindings = { git = "https://github.com/bytecodealliance/cargo-component" }
+image = { version = "0.24.6", default-features = false, features = ["gif", "jpeg", "ico", "png", "pnm", "tga", "tiff", "webp", "bmp", "hdr", "dxt", "dds", "farbfeld"]  }
+wit-bindgen = "0.10.0"
+ndarray = "0.15.3"
+
+
+
+# This crate is built with the wasm32-wasi target, so it's separate
+# from the main Wasmtime build, so use this directive to exclude it
+# from the parent directory's workspace.
+[workspace]
