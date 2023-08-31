@@ -6,6 +6,7 @@ pub mod onnx;
 pub mod openvino;
 
 use self::openvino::OpenvinoBackend;
+use crate::backend::onnx::OnnxBackend;
 use crate::wit::types::{ExecutionTarget, GraphEncoding, Tensor};
 use crate::{Backend, ExecutionContext, Graph};
 use std::fs::File;
@@ -16,7 +17,10 @@ use wiggle::GuestError;
 
 /// Return a list of all available backend frameworks.
 pub fn list() -> Vec<crate::Backend> {
-    vec![Backend::from(OpenvinoBackend::default())]
+    vec![
+        Backend::from(OpenvinoBackend::default()),
+        Backend::from(OnnxBackend::default()),
+    ]
 }
 
 /// A [Backend] contains the necessary state to load [Graph]s.
