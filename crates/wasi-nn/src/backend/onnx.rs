@@ -122,7 +122,6 @@ impl BackendExecutionContext for ONNXExecutionContext<'_> {
                     .iter()
                     .map(|d| *d as usize)
                     .collect::<Vec<_>>();
-                println!("input dims: {:?}", dims);
                 match input.tensor_type {
                     TensorType::Fp32 => {
                         let data = bytes_to_f32_vec(input.data.to_vec());
