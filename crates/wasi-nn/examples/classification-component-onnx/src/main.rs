@@ -19,7 +19,6 @@ use wit::wasi::nn::inference::{init_execution_context, set_input};
 use wit::wasi::nn::tensor::{Tensor, TensorData, TensorDimensions, TensorType};
 
 pub fn main() {
-    
     // Load the ONNX model - SqueezeNet 1.1-7
     // Full details: https://github.com/onnx/models/tree/main/vision/classification/squeezenet
     let model: GraphBuilder = fs::read("fixture/models/squeezenet1.1-7.onnx").unwrap();
@@ -33,7 +32,7 @@ pub fn main() {
 
     // Load SquezeNet 1000 labels used for classification
     let labels: GraphBuilder = fs::read("fixture/labels/squeezenet1.1-7.txt").unwrap();
-    let class_labels:Vec<String> = labels.lines().map(|line| line.unwrap()).collect();
+    let class_labels: Vec<String> = labels.lines().map(|line| line.unwrap()).collect();
     println!("Read ONNX Labels, # of labels: {}", class_labels.len());
 
     // Prepare WASI-NN tensor - Tensor data is always a bytes vector
@@ -47,7 +46,7 @@ pub fn main() {
     set_input(exec_context, 0, &tensor).unwrap();
     println!("Set input tensor");
 
-    // Execute the inferencing 
+    // Execute the inferencing
     compute(exec_context).unwrap();
     println!("Executed graph inference");
 
@@ -75,7 +74,10 @@ pub fn main() {
     sorted.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap());
 
     for (index, probability) in sorted.iter().take(3) {
-        println!("Index: {} - Probability: {}", class_labels[*index], probability);
+        println!(
+            "Index: {} - Probability: {}",
+            class_labels[*index], probability
+        );
     }
 }
 
@@ -106,12 +108,12 @@ fn image_to_tensor(path: String, height: u32, width: u32) -> Vec<u8> {
     // Normalizing values for the model
     let mean = [0.485, 0.456, 0.406];
     let std = [0.229, 0.224, 0.225];
-     
+
     // Read the number as a f32 and break it into u8 bytes
     for i in 0..raw_u8_arr.len() {
         let u8_f32: f32 = raw_u8_arr[i] as f32;
         let rgb_iter = i % 3;
-        
+
         // Normalize the pixel
         let norm_u8_f32: f32 = (u8_f32 / 255.0 - mean[rgb_iter]) / std[rgb_iter];
 

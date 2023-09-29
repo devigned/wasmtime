@@ -182,3 +182,12 @@ pub fn f32_vec_to_bytes(data: Vec<f32>) -> Vec<u8> {
     let result: Vec<u8> = chunks.iter().flatten().copied().collect();
     result
 }
+
+#[test]
+
+fn test_f32_bytes_array_and_back() {
+    let case = vec![0.0_f32, 1.1, 2.2, 3.3];
+    let bytes = f32_vec_to_bytes(case.clone());
+    let res = bytes_to_f32_vec(bytes);
+    assert_eq!(case, res);
+}
