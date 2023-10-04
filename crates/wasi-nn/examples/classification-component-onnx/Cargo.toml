@@ -13,7 +13,7 @@ package = "component:classification-component-onnx"
 [dependencies]
 cargo-component-bindings = { git = "https://github.com/bytecodealliance/cargo-component" }
 image = { version = "0.24.6", default-features = false, features = ["gif", "jpeg", "ico", "png", "pnm", "tga", "tiff", "webp", "bmp", "hdr", "dxt", "dds", "farbfeld"]  }
-wit-bindgen = "0.10.0"
+wit-bindgen = "0.12.0"
 ndarray = "0.15.3"
 
 

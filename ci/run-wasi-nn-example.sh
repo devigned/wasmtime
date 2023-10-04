@@ -29,6 +29,7 @@ export DYLD_LIBRARY_PATH="${OSX_OPENVINO_LIB_PATH}"
 
 # Build Wasmtime with wasi-nn enabled; we attempt this first to avoid extra work
 # if the build fails.
+cargo install --git https://github.com/bytecodealliance/cargo-component --locked cargo-component
 cargo build -p wasmtime-cli --features wasi-nn,component-model
 
 # Download all necessary test fixtures to the temporary directory.
@@ -41,8 +42,7 @@ pushd $WASMTIME_DIR/crates/wasi-nn/examples/classification-component-onnx
 cargo component build --release
 cp target/wasm32-wasi/release/classification-component-onnx.wasm $TMP_DIR
 popd
-echo "Running: run --dir fixture::$TMP_DIR -S nn $TMP_DIR/classification-component-onnx.wasm"
-cargo run -- run --dir fixture::$TMP_DIR -S nn $TMP_DIR/classification-component-onnx.wasm
+cargo run --features wasi-nn,component-model -- run --wasm component-model --dir fixture::$TMP_DIR -S nn $TMP_DIR/classification-component-onnx.wasm
 
 
 # Now build an example that uses the wasi-nn API. Run the example in Wasmtime
@@ -53,7 +53,6 @@ cargo build --release --target=wasm32-wasi
 cp target/wasm32-wasi/release/wasi-nn-example.wasm $TMP_DIR
 popd
 
-echo "Running: run -- run --dir fixture::$TMP_DIR -S nn $TMP_DIR/wasi-nn-example.wasm"
 cargo run -- run --dir fixture::$TMP_DIR -S nn $TMP_DIR/wasi-nn-example.wasm
 
 # Build and run another example, this time using Wasmtime's graph flag to
@@ -62,7 +61,6 @@ pushd $WASMTIME_DIR/crates/wasi-nn/examples/classification-example-named
 cargo build --release --target=wasm32-wasi
 cp target/wasm32-wasi/release/wasi-nn-example-named.wasm $TMP_DIR
 popd
-echo "Running: run -- run --dir fixture::$TMP_DIR -S nn,nn-graph=openvino::$TMP_DIR $TMP_DIR/wasi-nn-example-named.wasm"
 cargo run -- run --dir fixture::$TMP_DIR -S nn,nn-graph=openvino::$TMP_DIR \
     $TMP_DIR/wasi-nn-example-named.wasm
 
